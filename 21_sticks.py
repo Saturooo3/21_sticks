@@ -1,7 +1,18 @@
-def get_choice(player_turn):
+def bot_move(sticks):
+    if sticks % 4 == 0:
+        return 1
+    else:
+        return sticks % 4
+
+
+def get_choice(player_turn, sticks):
     while True:
         try:
-            taken = int(input(f"\nPlayer {player_turn} takes: "))
+            if player_turn == "Bot":
+                taken = bot_move(sticks)
+                print(f"\nBot takes: {taken}")
+            else:
+                taken = int(input(f"\nPlayer {player_turn} takes: "))
             if 1 > taken or 3 < taken:
                 print("Enter a number between 1 - 3!")
                 continue
@@ -21,18 +32,21 @@ def display_remaining_sticks(sticks):
 def main():
     sticks = 21
     display_remaining_sticks(sticks)
-    player_turn = 1
+    player_turn = "Bot"
 
     while True:
-        sticks -= get_choice(player_turn)
+        sticks -= get_choice(player_turn, sticks)
         display_remaining_sticks(sticks)
 
         if sticks <= 0:
-            print(f"\nPlayer {player_turn} won!")
+            if player_turn == "Bot":
+                print(f"\n{player_turn} won!")
+            else:
+                print(f"\nPlayer {player_turn} won!")
             break
 
 
-        player_turn = 2 if player_turn == 1 else 1
+        player_turn = 2 if player_turn == "Bot" else "Bot"
 
 
 if __name__ == "__main__":
